@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Untuk Istriku Tercinta</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #ffebee;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            background-image: url('https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/abb0a05c-7de6-4077-a49e-5aa4d85f5918.png');
+            background-size: cover;
+        }
+
+        #popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 350px;
+            z-index: 1000;
+            border: 2px solid #ff4081;
+        }
+
+        #popup h1 {
+            color: #ff4081;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #yesBtn {
+            background-color: #ff4081;
+            color: white;
+        }
+
+        #yesBtn:hover {
+            background-color: #e91e63;
+            transform: scale(1.05);
+        }
+
+        #noBtn {
+            background-color: #f8bbd0;
+            color: #c2185b;
+        }
+
+        #noBtn:hover {
+            background-color: #f48fb1;
+        }
+
+        #heart {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 235, 238, 0.9);
+            z-index: 999;
+            overflow: auto;
+            text-align: center;
+        }
+
+        .heart-text {
+            color: #ff4081;
+            font-size: 5px;
+            line-height: 5px;
+            letter-spacing: 1px;
+            white-space: pre;
+            margin: 50px auto;
+            font-family: monospace;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        #message {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            text-align: center;
+            max-width: 500px;
+        }
+
+        #message h2 {
+            color: #ff4081;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="popup">
+        <h1>❤️ Untuk Istriku Tercinta ❤️</h1>
+        <p>Apakah kamu tahu bahwa aku sangat mencintaimu?</p>
+        <button id="yesBtn" class="btn">Ya aku mencintaimu</button>
+        <button id="noBtn" class="btn">Aku pikir pikir lagi deh</button>
+    </div>
+
+    <div id="heart"></div>
+
+    <div id="message" class="hidden">
+        <h2>❤️ Aku Cinta Kamu ❤️</h2>
+        <p>Terima kasih sudah menjadi istriku yang luar biasa!</p>
+    </div>
+
+    <script>
+        const popup = document.getElementById('popup');
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const heart = document.getElementById('heart');
+        const message = document.getElementById('message');
+
+        // Fungsi untuk membuat hati dari simbol *
+        function createHeart() {
+            const size = 15;
+            const heartSize = Math.min(window.innerWidth, window.innerHeight) * 0.8;
+            const fontSize = heartSize / size;
+            
+            let heartText = '';
+            for (let y = -size; y <= size; y++) {
+                let line = '';
+                for (let x = -2*size; x <= 2*size; x++) {
+                    const distance = Math.sqrt(Math.pow(x/2, 2) + Math.pow(y, 2));
+                    if (distance <= size * 0.9) {
+                        line += '*';
+                    } else {
+                        line += ' ';
+                    }
+                }
+                heartText += line + '\n';
+            }
+            
+            const heartElement = document.createElement('pre');
+            heartElement.className = 'heart-text floating';
+            heartElement.style.fontSize = `${fontSize}px`;
+            heartElement.style.color = `hsl(${Math.random() * 60 + 330}, 100%, 50%)`;
+            heartElement.textContent = heartText;
+            
+            heart.innerHTML = '';
+            heart.appendChild(heartElement);
+        }
+
+        // Fungsi untuk memindahkan popup secara acak
+        function movePopup() {
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+            const popupWidth = popup.offsetWidth;
+            const popupHeight = popup.offsetHeight;
+            
+            const maxX = windowWidth - popupWidth;
+            const maxY = windowHeight - popupHeight;
+            
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+            
+            popup.style.left = `${randomX}px`;
+            popup.style.top = `${randomY}px`;
+            popup.style.transform = 'none';
+        }
+
+        // Event listener untuk tombol "Tidak"
+        noBtn.addEventListener('click', function() {
+            // Pindahkan popup ke posisi acak
+            movePopup();
+            
+            // Ubah teks tombol secara acak
+            const noTexts = [
+                "Aku pikir pikir lagi deh",
+                "Pasti nggak mungkin aku cinta kamu",
+                "Masa sih aku cinta?",
+                "Yakin aku cinta kamu?",
+                "Kayaknya nggak deh",
+                "Jangan bohong ya"
+            ];
+            const randomText = noTexts[Math.floor(Math.random() * noTexts.length)];
+            noBtn.textContent = randomText;
+            
+            // Ubah warna tombol secara acak
+            const colors = ['#f8bbd0', '#f48fb1', '#f06292', '#ec407a', '#e91e63', '#d81b60'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            noBtn.style.backgroundColor = randomColor;
+        });
+
+        // Event listener untuk tombol "Ya"
+        yesBtn.addEventListener('click', function() {
+            popup.style.display = 'none';
+            heart.style.display = 'block';
+            createHeart();
+            
+            // Tampilkan pesan setelah 3 detik
+            setTimeout(() => {
+                message.style.display = 'block';
+            }, 3000);
+        });
+
+        // Panggil createHeart saat ukuran window berubah
+        window.addEventListener('resize', createHeart);
+    </script>
+</body>
+</html>
+
